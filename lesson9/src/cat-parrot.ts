@@ -1,4 +1,5 @@
 import { Pet } from './pet';
+import { Flyable } from './interactions';
 
 export class Cat extends Pet {
     public constructor(name: string, owner: string) {
@@ -12,9 +13,9 @@ export class Cat extends Pet {
     public ignoreOwner(): void {
         console.log(`${this.name} is ignoring ${this.owner}`);
     }
-};
+}
 
-export class Parrot extends Pet {
+export class Parrot extends Pet implements Flyable {
     public constructor(name: string, owner: string) {
         super(name, owner);
     }

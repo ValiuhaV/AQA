@@ -13,7 +13,7 @@ export class Pet extends Animal {
     }
 
     public makeSound(): void {
-        console.log(`${this.name} is meowing`);
+        console.log(`${this.name} is making a sound`);
     }
 
 }
