@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "536290ec-ba7c-4b9c-b55f-cdd0f546d3a7",
+		"name": "lesson13",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "33259984"
+	},
+	"item": [
+		{
+			"name": "Get cat image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.environment.set(\"image_id\", jsonData[0].id);\r",
+							"pm.test(\"Image ID is saved\", function () {\r",
+							"    pm.expect(pm.environment.get(\"image_id\")).to.exist;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}images/search"
+			},
+			"response": []
+		},
+		{
+			"name": "Create favourite image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const image_id = pm.environment.get(\"image_id\");\r",
+							"\r",
+							"pm.test(\"Favourite image is created\", function () {\r",
+							"    pm.expect(image_id).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"const body = { image_id };\r",
+							"pm.environment.set(\"favourite_image\", JSON.stringify(body));\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.environment.set(\"favourite_id\", jsonData.id);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"image_id\": \"{{image_id}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}favourites"
+			},
+			"response": []
+		},
+		{
+			"name": "Get favourite images",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Favourite image is present\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const image_id = pm.environment.get(\"image_id\");\r",
+							"    const found = jsonData.some(f => f.image_id === image_id);\r",
+							"    pm.expect(found).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}favourites"
+			},
+			"response": []
+		},
+		{
+			"name": "Vote on image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.environment.set(\"vote_id\", jsonData.id);\r",
+							"\r",
+							"pm.test(\"Vote id is saved\", function () {\r",
+							"    pm.expect(pm.environment.get(\"vote_id\")).to.exist\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"image_id\": \"{{image_id}}\",\r\n    \"value\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}votes"
+			},
+			"response": []
+		},
+		{
+			"name": "Get votes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Vote exists for image\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const image_id = pm.environment.get(\"image_id\");\r",
+							"    const found = jsonData.some(f => f.image_id === image_id);\r",
+							"    pm.expect(found).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}votes"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete favourite image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Favourite image is deleted\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "{{baseUrl}}favourites/{{favourite_id}}"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": {
+			"key": "x-api-key",
+			"value": "live_S9j4m6L1I9mekr9Jrd75Nhw5HoP8Ndu4SeREou26LefIaUcvWXwyQdbUy3BxQeyV"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		}
+	]
+}
