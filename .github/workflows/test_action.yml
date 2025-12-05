@@ -27,7 +27,7 @@ jobs:
 
       - name: Run tests
         working-directory: ./lesson19
-        run: npx playwright test
+        run: npx playwright test --headed=false
 
       - name: Upload report
         if: always()
