@@ -16,7 +16,6 @@ test.describe('Yakaboo search and cart tests', () => {
 
     test('Book should be added to cart after clicking "Купити"', async () => {
         await yakaboo.search('Україна');
-        await yakaboo.resultCardWithUkraine.first().hover();
 
         await yakaboo.addFirstBookToCart();
         await yakaboo.openCart();

@@ -18,7 +18,7 @@ export class YakabooPage {
         this.searchTips = page.locator('.search-results');
         this.searchInput = page.locator('#search-input');
         this.searchButton = page.locator('.ui-search-form-input button.ui-btn-primary');
-        this.resultCardWithUkraine = page.locator('.category-card.expanded .ui-card-title[title*="Україна"]');
+        this.resultCardWithUkraine = page.locator('.ui-card-title[title*="Україна"]');
         this.addToCartButton = page.locator('[data-testid="addToCart"]');
         this.cartButton = page.locator('#site-header button.ui-btn-shopping-cart');
         this.cartSidebar = page.locator('[data-testid="microcart"]');
@@ -36,6 +36,9 @@ export class YakabooPage {
     public async search(query: string): Promise<void> {
         await this.searchInput.fill(query);
         await this.searchTips.waitFor({ state: 'visible'});
+        if (await this.closeDialogIcon.isVisible()) {
+            await this.closeDialogIcon.click();
+        }
         await this.searchButton.click();
     }
 
