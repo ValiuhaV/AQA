@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  react-app:
+    build:
+      context: ./Expense-Tracker-App-With-React.JS
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  playwright:
+    build:
+      context: ./tests
+      dockerfile: Dockerfile   # Dockerfile для Playwright тестів
+    depends_on:
+      - react-app
+    volumes:
+      - ./tests:/tests
+    environment:
+      - BASE_URL=http://react-app:3000
+      - REPORTPORTAL_URL=http://172.26.0.1:8080/api/v2
+      - REPORTPORTAL_API_KEY=local_NNJjeMUlRs2Iy397QkmURg3xNATBX2NNPEwIUxNKbbqhDpfn3dkvXYQ7R5dZniui
+    command: ["npx", "playwright", "test"]
